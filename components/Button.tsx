@@ -1,6 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import Colors from '../constants/colors';
+import { TouchableOpacity, Text, StyleSheet, ViewStyle } from 'react-native';
+import Colors from './Colors';   // ← poprawiony import
 
 interface ButtonProps {
   label: string;
@@ -33,7 +33,7 @@ export const Button: React.FC<ButtonProps> = ({
   const textStyle = [
     styles.label,
     styles[`${size}Label`],
-    styles[`${variant}Label`],        // ← nowy styl dla koloru tekstu
+    styles[`${variant}Label`],
   ];
 
   return (
@@ -54,41 +54,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  fullWidth: {
-    width: '100%',
-  },
+  fullWidth: { width: '100%' },
 
-  // === Warianty przycisku ===
-  primary: {
-    backgroundColor: Colors.light.tint,
-  },
+  primary: { backgroundColor: Colors.light.tint },
   secondary: {
     backgroundColor: Colors.light.surface,
     borderWidth: 1,
     borderColor: Colors.light.border,
   },
-  danger: {
-    backgroundColor: Colors.light.danger,
-  },
+  danger: { backgroundColor: Colors.light.danger },
 
-  // === Rozmiary ===
   small: { paddingVertical: 8, paddingHorizontal: 16 },
   medium: { paddingVertical: 12, paddingHorizontal: 20 },
   large: { paddingVertical: 16, paddingHorizontal: 24 },
 
-  disabled: {
-    opacity: 0.5,
-  },
+  disabled: { opacity: 0.5 },
 
-  // === Tekst ===
-  label: {
-    fontWeight: '600',
-  },
+  label: { fontWeight: '600' },
   smallLabel: { fontSize: 12 },
   mediumLabel: { fontSize: 14 },
   largeLabel: { fontSize: 16 },
 
-  // Kolory tekstu w zależności od wariantu
   primaryLabel: { color: '#FFFFFF' },
   secondaryLabel: { color: Colors.light.text },
   dangerLabel: { color: '#FFFFFF' },
