@@ -1,15 +1,1 @@
-{"name": "cult-diet",
- "version": "1.0.0",
- "private": true,
- "dependencies": {
-   "expo": "~44.0.0",
-   "react": "~17.0.1",
-   "react-dom": "~17.0.1",
-   "react-native": "~0.64.0",
-   "zustand": "^3.5.10",
-   "expo-camera": "~12.0.0"
- },
- "devDependencies": {
-   "typescript": "~4.5.4"
- }
-}
+{\n  "dependencies": {\n    "react-native": "~0.64.0",\n    "expo": "~43.0.0",\n    "typescript": "~4.3.5",\n    "zustand": "^3.5.10",\n    "expo-camera": "~12.0.0"\n  }\n}
