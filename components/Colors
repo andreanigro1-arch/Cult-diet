@@ -1,0 +1,39 @@
+const Colors = {
+  light: {
+    // Główny kolor aplikacji (zielony RP style)
+    tint: '#00C853',           // vibrant green
+    
+    // Teksty
+    text: '#212121',
+    textSecondary: '#757575',
+    
+    // Tła i powierzchnie
+    background: '#F8F9FA',
+    surface: '#FFFFFF',
+    border: '#E0E0E0',
+    
+    // Błędy i niebezpieczne akcje
+    danger: '#FF5252',
+    
+    // Placeholder w inputach
+    placeholder: '#9E9E9E',
+    
+    // Dodatkowe kolory
+    success: '#00C853',
+    warning: '#FFC107',
+  },
+  
+  // Na przyszłość – dark mode (możemy włączyć później)
+  dark: {
+    tint: '#00E676',
+    text: '#FFFFFF',
+    textSecondary: '#B0B0B0',
+    background: '#121212',
+    surface: '#1E1E1E',
+    border: '#333333',
+    danger: '#FF5252',
+    placeholder: '#757575',
+  },
+} as const;
+
+export default Colors;
