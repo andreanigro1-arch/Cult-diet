@@ -1,23 +1,13 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TextInput as RNTextInput,
-  StyleSheet,
-  TextInputProps,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
-import Colors from '../constants/colors';
+import { View, Text, TextInput as RNTextInput, StyleSheet, ViewStyle, TextStyle, TextInputProps } from 'react-native';
+import Colors from './Colors';   // ← poprawiony import
 
 interface CustomTextInputProps extends Omit<TextInputProps, 'style'> {
   label?: string;
-  placeholder?: string;
   error?: string;
   fullWidth?: boolean;
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
-  variant?: 'primary' | 'secondary'; // na przyszłość więcej wariantów
 }
 
 export const TextInput: React.FC<CustomTextInputProps> = ({
@@ -27,14 +17,9 @@ export const TextInput: React.FC<CustomTextInputProps> = ({
   fullWidth = true,
   containerStyle,
   inputStyle,
-  variant = 'primary',
   ...rest
 }) => {
-  const borderColor = error
-    ? Colors.light.danger
-    : variant === 'primary'
-    ? Colors.light.tint
-    : Colors.light.border;
+  const borderColor = error ? Colors.light.danger : Colors.light.tint;
 
   return (
     <View style={[styles.container, fullWidth && styles.fullWidth, containerStyle]}>
@@ -58,12 +43,8 @@ export const TextInput: React.FC<CustomTextInputProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 16,
-  },
-  fullWidth: {
-    width: '100%',
-  },
+  container: { marginBottom: 16 },
+  fullWidth: { width: '100%' },
   label: {
     fontSize: 14,
     fontWeight: '500',
@@ -79,9 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.surface,
     color: Colors.light.text,
   },
-  inputError: {
-    borderWidth: 2,
-  },
+  inputError: { borderWidth: 2 },
   errorText: {
     fontSize: 13,
     color: Colors.light.danger,
