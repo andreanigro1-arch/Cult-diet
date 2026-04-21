@@ -8,6 +8,7 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'danger';
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
+  fullWidth?: boolean;
   style?: ViewStyle;
 }
 
@@ -17,19 +18,32 @@ export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   size = 'medium',
   disabled = false,
+  fullWidth = false,
   style,
 }) => {
   const buttonStyle = [
     styles.button,
     styles[variant],
     styles[size],
+    fullWidth && styles.fullWidth,
     disabled && styles.disabled,
     style,
   ];
 
+  const textStyle = [
+    styles.label,
+    styles[`${size}Label`],
+    styles[`${variant}Label`],        // ← nowy styl dla koloru tekstu
+  ];
+
   return (
-    <TouchableOpacity onPress={onPress} disabled={disabled} style={buttonStyle}>
-      <Text style={[styles.label, styles[`${size}Label`]]}>{label}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      disabled={disabled}
+      style={buttonStyle}
+      activeOpacity={0.8}
+    >
+      <Text style={textStyle}>{label}</Text>
     </TouchableOpacity>
   );
 };
@@ -40,6 +54,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  fullWidth: {
+    width: '100%',
+  },
+
+  // === Warianty przycisku ===
   primary: {
     backgroundColor: Colors.light.tint,
   },
@@ -51,34 +70,26 @@ const styles = StyleSheet.create({
   danger: {
     backgroundColor: Colors.light.danger,
   },
-  small: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  medium: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-  },
-  large: {
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-  },
+
+  // === Rozmiary ===
+  small: { paddingVertical: 8, paddingHorizontal: 16 },
+  medium: { paddingVertical: 12, paddingHorizontal: 20 },
+  large: { paddingVertical: 16, paddingHorizontal: 24 },
+
   disabled: {
     opacity: 0.5,
   },
+
+  // === Tekst ===
   label: {
     fontWeight: '600',
   },
-  smallLabel: {
-    fontSize: 12,
-    color: Colors.light.text,
-  },
-  mediumLabel: {
-    fontSize: 14,
-    color: Colors.light.text,
-  },
-  largeLabel: {
-    fontSize: 16,
-    color: Colors.light.text,
-  },
+  smallLabel: { fontSize: 12 },
+  mediumLabel: { fontSize: 14 },
+  largeLabel: { fontSize: 16 },
+
+  // Kolory tekstu w zależności od wariantu
+  primaryLabel: { color: '#FFFFFF' },
+  secondaryLabel: { color: Colors.light.text },
+  dangerLabel: { color: '#FFFFFF' },
 });
