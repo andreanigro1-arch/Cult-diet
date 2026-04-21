@@ -1,0 +1,71 @@
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { UserData, Meal, FoodItem } from '../utils/AsyncStorageHelper'; // ← te typy które wcześniej zrobiliśmy
+
+interface DietState {
+  // === DANE ===
+  userData: UserData | null;
+  meals: Meal[];                    // wszystkie posiłki (możemy filtrować po dacie)
+  foodDatabase: FoodItem[];         // lokalna baza jedzenia (z barcode)
+
+  // === AKCJE ===
+  setUserData: (userData: UserData) => void;
+  updateTargetMacros: (macros: UserData['targetMacros']) => void;
+
+  addMeal: (meal: Meal) => void;
+  updateMeal: (id: string, updatedMeal: Partial<Meal>) => void;
+  deleteMeal: (id: string) => void;
+
+  addFoodToDatabase: (food: FoodItem) => void;   // po zeskanowaniu baru
+  getTodaysMeals: () => Meal[];                  // helper do dashboardu
+
+  // Reset (przydatny do testów)
+  resetStore: () => void;
+}
+
+export const useDietStore = create<DietState>()(
+  persist(
+    (set, get) => ({
+      userData: null,
+      meals: [],
+      foodDatabase: [],
+
+      setUserData: (userData) => set({ userData }),
+
+      updateTargetMacros: (macros) =>
+        set((state) => ({
+          userData: state.userData
+            ? { ...state.userData, targetMacros: macros }
+            : null,
+        })),
+
+      addMeal: (meal) => set((state) => ({ meals: [...state.meals, meal] })),
+      updateMeal: (id, updatedMeal) =>
+        set((state) => ({
+          meals: state.meals.map((m) =>
+            m.id === id ? { ...m, ...updatedMeal } : m
+          ),
+        })),
+      deleteMeal: (id) =>
+        set((state) => ({ meals: state.meals.filter((m) => m.id !== id) })),
+
+      addFoodToDatabase: (food) =>
+        set((state) => ({ foodDatabase: [...state.foodDatabase, food] })),
+
+      getTodaysMeals: () => {
+        const today = new Date().toISOString().split('T')[0];
+        return get().meals.filter((meal) => meal.date === today);
+      },
+
+      resetStore: () => set({ userData: null, meals: [], foodDatabase: [] }),
+    }),
+
+    {
+      name: 'rp-diet-storage',                    // klucz w AsyncStorage
+      storage: createJSONStorage(() => AsyncStorage),
+      // możesz dodać partialize jeśli chcesz zapisywać tylko część stanu
+      // partialize: (state) => ({ userData: state.userData, meals: state.meals }),
+    }
+  )
+);
