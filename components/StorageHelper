@@ -1,0 +1,125 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const STORAGE_KEYS = {
+  USER_DATA: 'user_data',
+  MEALS: 'meals',
+  FOOD_DATABASE: 'food_database',
+} as const;
+
+// ==================== TYPY DLA RP DIET ====================
+export interface UserData {
+  id?: string;
+  name: string;
+  targetMacros: {
+    protein: number;   // g
+    carbs: number;     // g
+    fat: number;       // g
+    calories: number;  // kcal
+  };
+  currentWeight?: number;     // kg
+  goalWeight?: number;
+  createdAt: string;
+}
+
+export interface FoodItem {
+  id: string;
+  name: string;
+  brand?: string;
+  barcode?: string;
+  macros: {
+    protein: number;
+    carbs: number;
+    fat: number;
+    calories: number;
+  };
+  servingSize: number;        // g lub ml
+  servingUnit: 'g' | 'ml' | 'piece';
+}
+
+export interface Meal {
+  id: string;
+  date: string;               // YYYY-MM-DD
+  name: string;               // np. "Śniadanie", "Obiad"
+  foods: FoodItem[];
+  totalMacros: {
+    protein: number;
+    carbs: number;
+    fat: number;
+    calories: number;
+  };
+  createdAt: string;
+}
+
+const AsyncStorageHelper = {
+  // ==================== USER DATA ====================
+  saveUserData: async (userData: UserData): Promise<void> => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
+    } catch (error) {
+      console.error('❌ Error saving user data:', error);
+      throw error; // możesz obsłużyć wyżej
+    }
+  },
+
+  getUserData: async (): Promise<UserData | null> => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(STORAGE_KEYS.USER_DATA);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (error) {
+      console.error('❌ Error getting user data:', error);
+      return null;
+    }
+  },
+
+  // ==================== MEALS ====================
+  saveMeals: async (meals: Meal[]): Promise<void> => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.MEALS, JSON.stringify(meals));
+    } catch (error) {
+      console.error('❌ Error saving meals:', error);
+      throw error;
+    }
+  },
+
+  getMeals: async (): Promise<Meal[] | null> => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(STORAGE_KEYS.MEALS);
+      return jsonValue != null ? JSON.parse(jsonValue) : [];
+    } catch (error) {
+      console.error('❌ Error getting meals:', error);
+      return [];
+    }
+  },
+
+  // ==================== FOOD DATABASE (z barcode) ====================
+  saveFoodDatabase: async (foodDatabase: FoodItem[]): Promise<void> => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.FOOD_DATABASE, JSON.stringify(foodDatabase));
+    } catch (error) {
+      console.error('❌ Error saving food database:', error);
+      throw error;
+    }
+  },
+
+  getFoodDatabase: async (): Promise<FoodItem[] | null> => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(STORAGE_KEYS.FOOD_DATABASE);
+      return jsonValue != null ? JSON.parse(jsonValue) : [];
+    } catch (error) {
+      console.error('❌ Error getting food database:', error);
+      return [];
+    }
+  },
+
+  // Dodatkowe przydatne metody
+  clearAll: async () => {
+    try {
+      await AsyncStorage.multiRemove(Object.values(STORAGE_KEYS));
+      console.log('🧹 Wszystkie dane lokalne zostały wyczyszczone');
+    } catch (error) {
+      console.error('❌ Error clearing storage:', error);
+    }
+  },
+};
+
+export default AsyncStorageHelper;
