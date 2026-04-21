@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Button } from '../components/Button'; // dostosuj ścieżkę jeśli masz inaczej
+import { Button } from '../../Button';        // ← to jest poprawne dla Twojej struktury
 
 const DashboardScreen: React.FC = () => {
   return (
@@ -8,8 +8,12 @@ const DashboardScreen: React.FC = () => {
       <Text style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 20 }}>
         Dashboard RP Diet
       </Text>
-      <Text>Tu będzie progress makr + dzisiejsze posiłki</Text>
-      <Button label="Dodaj posiłek" onPress={() => {}} />
+      <Text style={{ marginBottom: 20 }}>Tu będzie progress makr + dzisiejsze posiłki</Text>
+      
+      <Button 
+        label="Dodaj posiłek" 
+        onPress={() => console.log('Przycisk kliknięty!')} 
+      />
     </View>
   );
 };
